@@ -75,7 +75,6 @@ authRouter.post('/register', async (req: any, res: any) => {
   }
 })
 
-
 authRouter.post('/login', async (req: any, res: any) => {
   const { email, password } = req.body
 
@@ -99,6 +98,13 @@ authRouter.post('/login', async (req: any, res: any) => {
       return res.status(401).json({ message: 'Invalid email or password' })
     }
 
+    if (!user.is_verified) {
+      resendVerificationMail(email, user.id)
+      return res.status(401).json({
+        message: `Email not verified. A verification link has been sent to ${user.email}`,
+      })
+    }
+
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password' })
@@ -114,6 +120,87 @@ authRouter.post('/login', async (req: any, res: any) => {
   }
 })
 
+authRouter.get('/verify/:token', async (req: any, res: any) => {
+  const token = req.params.token
+  if (!token) {
+    return res.status(400).json({ message: 'Token is missing' })
+  }
 
+  try {
+    const { data: tokenData, error: findError } = await supabase
+      .from('tokens')
+      .select('*')
+      .eq('token', token)
+      .single()
+
+    if (findError) {
+      console.error('Error finding token:', findError)
+      return res.status(500).json({ message: 'Token not found' })
+    }
+
+    if (!tokenData) {
+      return res.status(401).json({ message: 'Invalid or expired token' })
+    }
+
+    const currentTime = new Date()
+    if (tokenData.expires_at < currentTime) {
+      await supabase.from('tokens').delete().eq('token', token)
+
+      return res.status(401).json({ message: 'Token expired' })
+    }
+
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', tokenData.user_id)
+      .single()
+
+    if (userError) {
+      console.error('Error finding user:', userError)
+      return res.status(500).json({ message: 'User not found' })
+    }
+
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid or expired token' })
+    }
+
+    console.log('User found:', user)
+
+    await supabase.from('users').update({ is_verified: true }).eq('id', user.id)
+    await supabase.from('tokens').delete().eq('token', token)
+
+    res.status(200).json({ message: 'Email verified successfully' })
+  } catch (error) {
+    console.error('Error verifying token:', error)
+    return res.status(500).json({ message: 'Internal server error' })
+  }
+})
+
+async function resendVerificationMail(email: string, userId: string) {
+  const { data: existingToken } = await supabase
+    .from('tokens')
+    .select('*')
+    .eq('user_id', userId)
+    .single()
+
+  const now = new Date()
+
+  if (existingToken && existingToken.expires_at > now) {
+    sendVerificationMail(email, existingToken.token)
+    return
+  }
+
+  const token = uuidv4()
+
+  await supabase.from('tokens').insert([
+    {
+      token,
+      user_id: userId,
+      expires_at: new Date(Date.now() + 60 * 60 * 1000),
+    },
+  ])
+
+  sendVerificationMail(email, token)
+}
 
 export default authRouter
