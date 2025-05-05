@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
-import authRouter from '../controllers/auth'
-import { authMiddleware } from '../middleware/auth'
+import authRouter from './controllers/auth'
+import { authMiddleware } from './middleware/auth'
 
 const app = express()
 
