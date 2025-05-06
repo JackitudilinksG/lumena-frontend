@@ -3,6 +3,7 @@ import {
     Text,
     Button,
     StyleSheet,
+    TextInput,
 } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
@@ -26,7 +27,8 @@ const LoginScreen: React.FC = () =>  {
         setPassword('1234')
 
         try {
-            const response = await fetch('http://localhost:3000/api/auth/login', {
+            console.log('Logging in...')
+            const response = await fetch('http://10.0.2.2:3000/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,6 +40,8 @@ const LoginScreen: React.FC = () =>  {
             })
 
             console.log(response.status)
+            console.log(JSON.parse(await response.text()))
+            navigation.navigate('HomeScreen')
         } catch (error) {
             console.log(error)
         }
@@ -47,9 +51,23 @@ const LoginScreen: React.FC = () =>  {
         <View style={styles.container}>
         <Text style={styles.title}>Welcome to Lumena</Text>
         <Text style={styles.subtitle}>Your personal AI assistant</Text>
+        <TextInput
+          style={styles.emailInput}
+          onChangeText={setEmail}
+          value={email}
+          placeholder="Enter your email address"
+          keyboardType="numeric"
+        />
+        <TextInput
+          style={styles.passInput}
+          onChangeText={setPassword}
+          value={password}
+          placeholder="Enter your password"
+          keyboardType="numeric"
+        />
         <Button
             title="Login"
-            onPress={() => navigation.navigate('HomeScreen')}
+            onPress={handleLogin}
             color="#841584"
         />
         </View>
@@ -66,13 +84,29 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
         color: '#fcfcfc',
     },
     subtitle: {
         fontSize: 16,
-        marginBottom: 40,
+        marginBottom: 20,
         color: '#fcfcfc',
+    },
+    emailInput: {
+        height: 40,
+        width: '60%',
+        marginBottom: 12,
+        borderWidth: 2,
+        borderColor: '#fcfcfc',
+        padding: 10,
+        backgroundColor: '#fcfcfc',
+    },
+    passInput: {
+        height: 40,
+        width: '60%',
+        borderWidth: 2,
+        borderColor: '#fcfcfc',
+        padding: 10,
+        backgroundColor: '#fcfcfc',
     },
 });
 

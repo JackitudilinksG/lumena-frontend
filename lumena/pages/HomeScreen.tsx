@@ -6,8 +6,7 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const HomeScreen: React.FC = () =>  {
-
+const HomeScreen: React.FC = (name) =>  {
     return (
         <View style={styles.container}>
             <View style={styles.titleArea}>
