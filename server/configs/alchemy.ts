@@ -2,6 +2,8 @@ import { createPublicClient, createWalletClient, http, Block } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { sepolia } from 'viem/chains'
 
+type HexString = `0x${string}`
+
 const client = createPublicClient({
   chain: sepolia,
   transport: http(process.env.ALCHEMY_API_KEY as string),
@@ -10,7 +12,7 @@ const client = createPublicClient({
 const walletClient = createWalletClient({
   chain: sepolia,
   transport: http(process.env.ALCHEMY_API_KEY as string),
-  account: privateKeyToAccount(`0x${process.env.PRIVATE_KEY}` as `0x${string}`),
+  account: privateKeyToAccount(`0x${process.env.PRIVATE_KEY}` as HexString),
 })
 
 async function fetchBlock() {
