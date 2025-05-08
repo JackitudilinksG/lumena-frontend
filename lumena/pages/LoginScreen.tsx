@@ -23,8 +23,8 @@ const LoginScreen: React.FC = () =>  {
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
-        setEmail('loejstarc@gmail.com')
-        setPassword('1234')
+        setEmail('example@gmail.com')
+        setPassword('applebottomjeans')
 
         try {
             console.log('Logging in...')
@@ -39,7 +39,6 @@ const LoginScreen: React.FC = () =>  {
                 }),
             })
 
-            console.log(response.status)
             console.log(JSON.parse(await response.text()))
             navigation.navigate('HomeScreen')
         } catch (error) {
