@@ -35,21 +35,21 @@ const HomeScreen: React.FC = (name) =>  {
             <View style ={styles.displayedID1}>
                 <Image source={{uri: 'https://i.pravatar.cc/20'}} style={{ borderRadius: 20 }}/>
                 <View style={{flexDirection: 'column', alignItems: 'flex-start', paddingLeft: 20}}>
-                    <Text style={ styles.displayedIDTitle }>Aadhar</Text>
+                    <Text style={ styles.displayedIDTitle }>St Joseph Engineer College</Text>
                     <Text style={ styles.displayedIDTitle }>1234-5678-90</Text>
                 </View>
             </View>
             <View style ={styles.displayedID1}>
                 <Image source={{uri: 'https://i.pravatar.cc/20'}} style={{ borderRadius: 20 }}/>
                 <View style={{flexDirection: 'column', alignItems: 'flex-start', paddingLeft: 20}}>
-                    <Text style={ styles.displayedIDTitle }>PAN</Text>
+                    <Text style={ styles.displayedIDTitle }>Example Company Name</Text>
                     <Text style={ styles.displayedIDTitle }>1234-5678-90</Text>
                 </View>
             </View>
             <View style ={styles.displayedID1}>
                 <Image source={{uri: 'https://i.pravatar.cc/20'}} style={{ borderRadius: 20 }}/>
                 <View style={{flexDirection: 'column', alignItems: 'flex-start', paddingLeft: 20}}>
-                    <Text style={ styles.displayedIDTitle }>Driver's Licence</Text>
+                    <Text style={ styles.displayedIDTitle }>NFC Use123</Text>
                     <Text style={ styles.displayedIDTitle }>1234-5678-90</Text>
                 </View>
             </View>

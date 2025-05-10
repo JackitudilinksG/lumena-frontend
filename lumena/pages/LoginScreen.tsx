@@ -6,7 +6,6 @@ import {
     TextInput,
 } from 'react-native';
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
